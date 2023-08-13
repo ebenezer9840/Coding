@@ -1,0 +1,238 @@
+----------------------------------------------- Varray
+declare
+Type a is varray(100) of number(30);
+b a;
+Type c is varray(100) of varchar2(30);
+d c;
+begin
+select employee_id,First_name bulk collect into b,d from employees where rownum <= 30;
+for x in 1..b.last loop
+dbms_output.put_line(b(x)||d(x));
+end loop;
+end;
+/
+---------------------------------------Varray collections and Built in functions
+declare
+Type a is varray(100) of number(30);
+b a;
+Type c is varray(100) of varchar2(30);
+d c;
+t number;
+begin
+select employee_id,First_name bulk collect into b,d from employees where rownum <= 30;
+
+DBMS_OUTPUT.put_line('IF CONDITION');
+if b.exists(41) = TRUE then --- Checks if 41th array exist
+dbms_output.put_line('41');
+elsif
+b.exists(30) = true then --- Checks if 30th array exist
+dbms_output.put_line('30');
+else
+dbms_output.put_line('Not Requested Data');
+end if;
+
+DBMS_OUTPUT.put_line('ORACLE BUILD IN COLLECTION FUNCTIONS');
+dbms_output.put_line(b.Count); --Counts the array for the present data
+dbms_output.put_line(b.limit);--shows the size of the array
+dbms_output.put_line(b.first);--shows the firstsubscript value in array
+dbms_output.put_line(b.Last);--shows the lastsubscript value in array
+
+DBMS_OUTPUT.put_line('AFTER DELETION');
+b.trim(27); --Deletes last 27 subscript records
+DBMS_OUTPUT.put_line('AFTER DELETION' || b(1));
+dbms_output.put_line(b.Last);
+DBMS_OUTPUT.put_line('prior');
+DBMS_OUTPUT.put_line(b.prior(b.last));
+end;
+/
+------------------------------------------------- Index by integer
+declare
+type c is table of varchar(100) index by binary_integer;
+d c;
+F C;
+begin
+select employee_id,first_name bulk collect into d,f from employees where rownum <= 30;
+for x in 1..d.last loop
+dbms_output.put_line(d(x)||f(x));
+end loop;
+end;
+/
+----------------------------------------------------Index by integer Collections
+
+declare
+Type a is table of varchar(40) index by binary_integer;
+b a;
+------------------------------
+Type F is table of varchar(40) INDEX BY Varchar(30);
+E F;
+------------------------------
+type c is varray(30) of number;
+D C;
+------------------------------
+t Varchar(30);
+------------------------------
+begin
+
+DBMS_OUTPUT.PUT_LINE('INTEX BY INTEGER');
+
+b(2) := 5; -----KEY BASED - INDEX INPUT IT STARTS FROM 2
+
+dbms_OUTPUT.put_line(b.count);
+
+DBMS_OUTPUT.PUT_LINE('LIMIT');
+dbms_OUTPUT.put_line(b.LIMIT); -----------THERE IS NO LIMIT SIZE UNBOUNDED SO NO VALUE WILL BE RETURNED
+
+E('B') := 'COMPUTER'; --- KEY BASED INDEX CAN BE VARCHAR AS WELL
+DBMS_OUTPUT.PUT_LINE(E('B'));
+DBMS_OUTPUT.PUT_LINE(E.COUNT); ---VARIABLE GETS STORED IN B HOWEVER IT WILL BE COUNT 1
+
+select FIRST_NAME into E(40) from hr.employees where employee_id = 101;  ---INDEX BY INTEGER DOESNT ACCEPT A SINGLE INPUT
+dbms_output.put_line(E(40));
+
+IF E.EXISTS(40) THEN
+DBMS_OUTPUT.PUT_LINE('DATA EXIST '||E(40));
+ELSE
+DBMS_OUTPUT.PUT_LINE('NO DATA FOUND');
+
+END IF;
+
+DBMS_OUTPUT.put_line('ORACLE BUILD IN COLLECTION FUNCTIONS');
+dbms_output.put_line(E.Count); --Counts the array for the present data
+
+E(57) := 20;---------SUB KEY WHICH SHOULD BE UNIQUE
+E(60) := 10;
+E(61) := 10;
+
+DBMS_OUTPUT.PUT_LINE('NEWLY INSERTED VALUE');
+DBMS_OUTPUT.PUT_LINE(E(57));
+DBMS_OUTPUT.PUT_LINE(E(60));
+DBMS_OUTPUT.PUT_LINE(E(61));
+DBMS_OUTPUT.PUT_LINE('BEFORE DELETION');
+
+DBMS_OUTPUT.PUT_LINE(E.COUNT);
+
+dbms_output.put_line('FIRST VALUE WILL BE LEASE');
+dbms_output.put_line(E.first);--shows the first LEAST value in array
+dbms_output.put_line('LAST MAXIMUL VALUE IN THE ARRAY-KEY');
+dbms_output.put_line(E.Last);
+
+E.DELETE(57,60); --INSTEAD OF TRIM  IN VARRAY WE USE DELETE
+
+DBMS_OUTPUT.PUT_LINE('AFTER DELETION');
+DBMS_OUTPUT.PUT_LINE(E.COUNT);
+
+------------------------------------------------------------------------------------------------------
+DBMS_OUTPUT.PUT_LINE('VARRAY');
+
+D := C();  ----OPENS ARRAY INTIALLY IT WILL BE IN 1
+D.EXTEND();  ----EXTENDS ONE ROW
+D(1) := 10;  -- VARRAY ANOTHER METHOD OF INPUT
+
+D := C(20); ----VARRAY INPUT IT CANT BE START FROM 2
+
+dbms_output.put_line(D.count);
+dbms_output.put_line(D(1));
+
+select employee_id bulk collect into D from hr.employees where employee_id = 101; -- ARRAY CAN BE USED FOR SINGLE INPUT----INDEX ACCEPT ONLY BULK INPUT
+dbms_output.put_line(D(1));  -------IN VARRAY DATA WILL GET INSERTED IN 1 ST ROW REPLACE ALL DATA
+
+end;
+/
+---------------------------------------------------while Loop
+declare
+type c is table of varchar(100) index by binary_integer;
+d c;
+F C;
+begin
+select employee_id,first_name bulk collect into d,f from employees where rownum <= 30;
+while d.Count > 1 loop
+dbms_output.put_line(d(d.next)||f(d.next));
+d.count:= d.count-1;
+end loop;
+end;
+/
+
+-------------------------------------------------Date
+select to_char(to_date(Hire_date,'DD/mm/yyyy'))  from employees where rownum < 2;
+
+--------------------------------------------
+declare
+type a is table of date index by binary_integer;
+b a;
+x varchar(40);
+begin
+for i in 1..10 loop
+b(i) := sysdate + 1;
+dbms_output.put_line(b(i));
+x :=user;
+dbms_output.put_line(x);
+end loop;
+end;
+/
+
+--------------------------------------
+create or replace procedure duplicate_insert (a in number, b in varchar)
+
+as
+type t1_var is varray(6) of number;  -- varray 6 size of an array (t1_var(1)..t1_var(6))
+t1_varray t1_var;
+
+type t1_ind is table of varchar(1) index by binary_integer;  --varchar(1) size of data to be retrived ex 1, 11 will throw error.
+t1_index t1_ind;
+
+cursor c1 is select a from t1;
+
+
+begin
+dbms_output.put_line ('varray printing');
+open c1;
+fetch c1 bulk collect into t1_varray;
+for x in 1..t1_varray.count loop
+dbms_output.put_line (t1_varray(x));
+end loop;
+close c1;
+
+open c1;
+dbms_output.put_line ('index-by-Integer printing');
+fetch c1 bulk collect into t1_index;
+for x in 1..t1_index.last loop
+dbms_output.put_line (t1_index(x));
+end loop;
+
+close c1;
+end;
+/
+
+exec DUPLICATE_INSERT(1,2)
+
+insert into t1 values (11,'Malliga')
+
+
+
+Yamaha@6615
+
+
+1
+1
+0
+Nul
+
+1
+0
+Nul
+Nul
+
+
+
+
+
+
+1203320051475469
+eben9840
+Computer12
+TPIN 660029
+R344571
+
+
+
+
