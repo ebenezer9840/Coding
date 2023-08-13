@@ -1,0 +1,322 @@
+1. Create sequence start from 2 and get it increamented by 5 and max should be 100.
+ANS:
+Create Sequence S1
+Start with 2
+increment by 5
+maxvalue 100;
+
+2. Use the Created sequence in table for inserting ID?
+ANS:
+Insert into table values(s1.nextval,'Name',1111);
+
+3. What does Nextval and Currval stands for?
+ANS:
+Next val stands for next value in sequence
+Curr val stands for Current value in sequence
+
+4. How to check table and sequence description?
+ANS:
+Desc tablename;
+Desc Sequence s1;
+
+5. What is character function
+ANS:
+CHAR used to store character max 32767 bytes
+VARCHAR2 Used to store character and variables has max of 32762 bytes
+Varchar varchar(10) byte of 10 be allocated from memory
+varchar2 varchar(10) only used byt been allocated from memory there is no memory wastage
+RAW used to store image,graphic etc 32767 bytes
+
+6. What are joins and types of joins explain
+ANS:
+EQUI JOIN - Bring the Matching Record
+Select t1.name, t2.course
+FROM t1,t2
+where t1.course=t2.course;
+LEFT JOIN - Pulls all left side data eventhough it has no match in left side
+Select t1.name, t2.course
+FROM t1,t2
+where t1.course=t2.course(+);
+RIGHT JOIN - same like left join vice versa right
+Select t1.name, t2.course
+FROM t1,t2
+where t1.course(+)=t2.course;
+CROSS JOIN - it doesnt checks matches however will displays out no of row in table 1 * no of row in table 2
+Ex: if table1 has 3 row and table 2 has 4 rows output will be 3*4 = 12 output 
+Select t1.name, t2.course
+FROM t1,t2
+FULL OUTER JOIN - Displays all output of left and right side with matches and without matches
+Select t1.name, t2.course
+FROM t1 Full Outer Join t2
+On t1.course=t2.course;
+
+7. what is sub query in general
+ANS:
+Query is a simple an easy way to bring the output it will have select which needs to gets displayes and from table where the condition matches.
+
+8. what is unix and feautures of unix?
+ANS UNIX is a operating system written used C language
+  feautures:
+   1. Multi User 2. Multo Tasking 3. Security 
+
+9. what are the ways to find files in unix?
+ANS: FIND - Name "FileName1" search the file with filename1
+     Find - Iname - I indicates that it ignores case sensitive even if the folder name is case sensitive it will find
+     FIND -type d 'FILE Name' TO find using file type D indicates directory if we place F it shows file  
+
+10. What is an OS? 
+ANS: Operating system is a interface between human and machine. As system codings were in bits human information gets converted to machine language
+
+1. Difference between varchar and varchar2 data types?
+
+Varchar can store upto 2000 bytes and varchar2 can store upto 4000 bytes. Varchar will occupy space for NULL values and Varchar2 will not occupy any space. Both are differed with respect to space.
+
+4. What is the use of NVL function?
+
+The NVL function is used to replace NULL values with another or given value. Examp
+
+select nvl(empty_data_col,1) from dual ;  o/p will be 1 for null cell
+
+6. What are nested tables?
+
+   Nested table is a data type in Oracle which is used to support columns containing multi valued attributes. It also hold entire sub table.
+   
+7. What is COALESCE function?
+
+COALESCE function is used to return the value which is set to be not null in the list. If all values in the list are null, then the coalesce function will return NULL.
+
+select COALESCE(name,dept,id) from t2;    --> It will show the value which is after the null
+
+
+10. What is DML?
+
+Data Manipulation Language (DML) is used to access and manipulate data in the existing objects.  DML statements are insert, select, update and delete and it won’t implicitly commit the current transaction.
+
+11. What is the difference between TRANSLATE and REPLACE?
+
+Translate is used for character by character substitution and Replace is used substitute a single character with a word.
+
+12. How do we display rows from the table without duplicates?
+
+Duplicate rows can be removed by using the keyword DISTINCT in the select statement.
+
+
+19. What do you mean by GROUP BY Clause?
+
+A GROUP BY clause can be used in select statement where it will collect data across multiple records and group the results by one or more columns.
+
+24. What is VArray?
+
+VArray is an oracle data type used to have columns containing multivalued attributes and it can hold bounded array of values.
+
+27. What is a View?
+
+View is a logical table where the query been parased and store in database every time when we execute the query the SQL statement run and will bring the o/p from 1 or more table, View dont have any index not view data wont be stored in Database, View can perform a Insert if Master Table permits, 
+
+30. What are SET operators?
+
+SET operators are used with two or more queries and those operators are Union, Union All, Intersect and Minus.
+Should have same column datatype in 2 tables
+
+union --> bring matched/unmatched distinct record from both table in single column
+unionall --> bring matched/unmatched duplicated record from both table in single column
+intersect --> brings distinct matched record from both table in single columns
+minus --> bring distinct value table t2 which are not in table 1
+
+31. How can we delete duplicate rows in a table?
+
+Duplicate rows in the table can be deleted by using ROWID.
+
+32. What are the attributes of Cursor?
+
+Attributes of Cursor are
+
+%FOUND
+Returns NULL if cursor is open and fetch has not been executed
+Returns TRUE if the fetch of cursor is executed successfully.
+Returns False if no rows are returned.
+
+
+%NOT FOUND
+Returns NULL if cursor is open and fetch has not been executed
+Returns False if fetch has been executed
+Returns True if no row was returned
+
+%ISOPEN
+Returns true if the cursor is open
+Returns false if the cursor is closed
+
+%ROWCOUNT
+Returns the number of rows fetched. It has to be iterated through entire cursor to give exact real count.
+
+
+36. What is hash cluster?
+
+Hash Cluster is a technique used to store the table for faster retrieval. Apply hash value on the table to retrieve the rows from the table.
+
+37. What are the various constraints used in Oracle?
+
+Following are constraints used:
+
+NULL – It is to indicate that particular column can contain NULL values
+NOT NULL – It is to indicate that particular column cannot contain NULL values
+CHECK – Validate that values in the given column to meet the specific criteria
+DEFAULT – It is to indicate the value is assigned to default value
+
+
+38. What is difference between SUBSTR and INSTR?
+
+SUBSTR returns specific portion of a string and INSTR provides character position in where a pattern is found in a string.
+
+SUBSTR returns string whereas INSTR returns numeric.
+
+
+39. What is the parameter mode that can be passed to a procedure?
+
+IN, OUT and INOUT are the modes of parameters that can be passed to a procedure.
+
+
+
+40. What are the different Oracle Database objects?
+
+There are different data objects in Oracle –
+
+Tables – set of elements organized in vertical and horizontal
+Views  – Virtual table derived from one or more tables
+Indexes – Performance tuning method for processing the records
+Synonyms – Alias name for tables
+Sequences – Multiple users generate unique numbers
+Tablespaces – Logical storage unit in Oracle
+
+44. What is the fastest query method to fetch data from the table?
+
+Row can be fetched from table by using ROWID. Using ROW ID is the fastest query method to fetch data from the table.
+
+
+45. What is the maximum number of triggers that can be applied to a single table?
+
+12 is the maximum number of triggers that can be applied to a single table.
+
+46. Case and Decode:
+
+Case is a statement
+Case can work with Logical operation like between < >
+Case can be used in SQL/PLSQL Block
+Case handles Null Differently
+
+Decode is a function
+Decode will cheeck for equality It will not perform any logical Operation
+Since Decode is a Function can be used inside SQL statement
+
+Collection	Record
+The internal components always have the same data type, and are called elements
+You can access each element of a collection variable by its unique index
+Syntax: variable_name(index).
+To create a collection variable : define a collection type and then create a variable of that type or use %TYPE.
+You can create a collection of records.
+
+
+The internal components can have different data types, and are called fields
+You can access each field of a record variable by its name
+Syntax: variable_name.field_name
+To create a record variable: define a RECORD type and then create a variable of that type or use %ROWTYPE or %TYPE.
+You can create a record that contains collections.
+
+
+
+1. What is Database
+
+ANS:  Database is a storage place where data gets stored it can file picture etc, Database are created to retrieve data modify and Update when its necessary same will be applied here in SQL
+
+2. Define Table
+
+ANS: Table is data elements in values which is being stored in database, In Table form data can be retrieved easily and modified accordingly
+ 
+3. Whats Is arthmetic and Logical Operator, Comparision Operator
+ 
+ANS: 
+
+Arithmetic Operator.
++ Addition - Subtraction * multiplication / division
+
+Logical operator
+AND 
+OR
+NOT 
+
+Comparision/Relational Operator
+<
+>
+<>
+>=
+<=
+
+4. What is DML and DCL, DDL
+
+DML: Data Manipulation Language(Used for table Records)
+
+SELECT - Retrieves data from one or More table
+INSERT - Insert Values to the table
+UPDATE - Update Values in the Table
+DELETE - Delete from table
+
+DCL: Data control Language
+
+GRANT : Which is used to grant access
+REVOKE : takes back the granted access
+
+DDL : Data Definition Language (Used in Table)
+
+CREATE: Used to Create new table
+ALTER: Modify the table
+DROP: Delete the table
+ 
+5. How to Create Table with ('ID as primary Key' 'Name' 'Sales Org' 'salary')
+
+ANS:
+Create table king(ID number, Name varchar(60), Salary number, Primary key(ID));
+
+6. Insert Data in Particaular Field 'Salary'
+ANS:
+INSERT INTO king Values(1,'Null',2000);
+if table has primary key data cant be entered without Primary key
+
+7. What is SQL
+ANS:
+Structured query language which is used to manage data held in a database
+ 
+8. What is Numer Function
+ANS: 
+ABS : Shows absolute value ex: if data is -1111 by using abs we can pull value 111
+
+   ex:  4 Dilip  -1111
+
+select abs(salary) from king where id = 4;
+
+Output: 1111
+
+CEIL: Display the first decimal value
+    ex:  3 Dilip  1111.2 
+
+select ceil(salary) from king where id = 2;
+
+Output: 1111
+
+ROUND: Used to round off the value 
+
+ex: value 778787.12322
+
+select Round(Value) from king where id = 2;
+
+Output: 
+
+778787.13
+
+
+select substr(first_name,instr(first_name,'t'),2) from employees where employee_id=100;
+
+
+
+
+
+

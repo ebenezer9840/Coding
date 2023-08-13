@@ -1,0 +1,99 @@
+select * from employees
+
+
+select * from
+(
+select * from employees order by salary desc fetch first 3 row only
+) order by salary asc fetch first 1 row only
+
+---------------------------------------------------
+select * from ( select * from employees order by employee_id desc) where rownum <= 10;
+
+
+select department_id,count(employee_id)
+from employees
+group by department_id
+
+
+
+------------------------------------------------------------------------------------
+select m.employee_id as manager_id,listagg(e.first_name,',') within group ( order by m.employee_id)as employee
+from employees e join employees m
+on e.manager_id = m.employee_id group by m.employee_id
+------------------------------------------------------------------------------------
+select employee_id,manager_id,level
+from employees
+start with manager_id is null
+connect by prior employee_id = manager_id
+------------------------------------------------------------------------------------
+Select e.first_name,e.employee_id,e.manager_id,m.first_name as manager
+from employees E inner join employees m
+on e.manager_id = m.employee_id
+order by e.employee_id
+------------------------------------------------------------------------------------
+Duplicate
+
+select department_id,count(salary) from hr.employees
+group by department_id
+having count(salary) > 1
+
+-------------------------------------------------------------------------------------
+with ct
+as
+(
+select a,b,row_number() over (partition by a,b order by a,b) rm
+from boa 
+)
+delete from boa where rm > 1
+
+--------------------------------------------------------------------------------------
+
+Duplicate in 2 columns
+
+delete from boa where a in (
+select a from
+(
+select a,b,c,row_number() over (partition by b,c order by b,c) as  rm from BOA
+)
+where rm > 1
+)
+
+
+select distinct c2.*
+from BOA c1 join BOA C2
+on c1.b=c2.b and c1.c=c2.c
+where c2.a > c1.a
+------------------------------------------------------------------------------------------
+create or replace function insert_f1(a in number, b in VARCHAR2)
+return number
+is
+c number;
+pragma autonomous_transaction;
+begin
+c:=a+2;
+insert into f1_1 values (c,b);
+commit;
+return c;
+end;
+/
+
+select INSERT_F1 (1,'RAJAN1') from dual;
+-------------------------------------------------------------------------------------------
+select department_id,max(salary) as MAX_SAL,min(salary) as Min_sal
+from employees
+where job_id not in ('AD_PRES')
+group by department_id
+having count(department_id) > 2
+order by department_id
+--------------------------------------------------------
+
+with cte as
+(
+select avg(salary) as Aa,max(salary) as M1 ,min(salary) as m2,department_id from employees
+group by department_id
+order by department_id
+)
+
+select department_id from cte;
+
+
