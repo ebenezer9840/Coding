@@ -96,4 +96,213 @@ order by department_id
 
 select department_id from cte;
 
+Rank : Will be skipping the sequence position 
+
+
+RANK 
+
+SELECT * FROM(
+
+SELECT FIRST_NAME, SALARY, DENSE_RANK() 
+
+OVER(ORDER BY salary DESC)  r  FROM employees) 
+
+WHERE r=2;
+
+Dense Rank : Wont Skip the sequential position
+------------------------------------------------------------------
+
+
+Set Operator: Should have equal column on table 1 and Table 2 with similar Data type.
+-------------
+MINUS
+USED TO COMBINE 2 TABLES and brings value from first table which is not in 2nd table
+
+INTERSECT
+USED TO COMBINE 2 TABLES and brings single common value from table 1 and table 2 which are common in t1 and t2
+
+UNION
+USED TO COMBINE 2 TABLES and brings Distinct (non duplicate value from both table)
+
+RULES for the above 3 operator --> the table col should be same with same data type, Col of the table must be in same order;
+-----------------------------------------------------------------------------------
+
+
+PRIMARY KEY and UNIQUE KEY and FOREIGN KEY
+
+
+Both Primary and Unique key carry unique values but the primary key can not have a null value where the Unique,foreign key can have null values, 
+there cannot be more than one Primary key but unique keys can be multiple.
+
+A foreign key is an attribute or a set of attributes that references the primary key of some other table. Foreign Key accepts null value
+Basically, 	it is used to link together two tables.
+Foreign key is used to make 2 table parent child relation
+
+
+UNIQUE KEY (OrderID),
+PRIMARY KEY (OrderID),
+FOREIGN KEY (PersonID) REFERENCES Persons(PersonID)
+
+
+PRIMARY_KEY
+
+CREATE TABLE Persons (
+    ID int NOT NULL,
+    Fathername varchar(255),
+    LastName varchar(255) NOT NULL,
+    ORDERID int,
+    CONSTRAINT PK_Person PRIMARY KEY (ID),
+    CONSTRAINT UC_Person UNIQUE (ORDERID)
+ );
+
+
+FOREIGH KEY:
+CREATE TABLE Orders (
+    OrderID int NOT NULL,
+    OrderNumber int NOT NULL,
+    ID int,
+    PRIMARY KEY (OrderID),
+    CONSTRAINT FK_PersonOrder FOREIGN KEY (ID)
+    REFERENCES Persons(ID)
+);
+
+Primary key and foreign key is said as Parent child table where deleting a parent table will not be allowed as Foreign key constraint,
+
+If we need to delete the row in parent while creating Child table we can use on Delete cascade so that Parent table can perform Delete statement
+And corresponding row in child too will get deleted.
+
+
+ON DELETE CASCADE 
+--------------------
+
+Create table on_delete_1
+(a int,b varchar(255),
+constraint FK_KEY foreign key (a) references delete_1(a)
+on delete cascade);
+
+select * from all_constraints 
+
+select * from all_constraints where lower(table_name) ='dept_no'
+select * from user_cons_columns where lower(table_name) ='dept_no'
+
+
+
+Max Salary
+--------------
+select max(salary) from employees
+where salary < (select max(salary) from employees);
+
+-------------------------------------------------------------------------------------------------------------
+Decode is a Function can be used in Sql Statement,
+Case is a statement can be used in Sql/PLSQL blocks.
+Decode can handle only Equality 
+Case can handle comparision operator like > < = and between etc
+
+Decode
+-------
+select employee_id, decode(manager_id,100,'ACCOUNTING',102,'Commerce','unknown')  Manage
+From employees
+
+CASE Staement
+-------------
+select employee_id, (case when manager_id = 100 then 'ACCOUNTING'
+             WHEN  manager_id = 102 then 'COMMERCE'
+             ELSE 'N/A'
+        END) Manager
+        From employees
+		
+-------------------------------------------------------------------------------------------------------------------
+Group By
+
+The column which are not encapsulated(used) in AGGERATE function must be included in group by clause.
+
+GROUP BY Clause --> Groups by statement group records into summary rows and return one record for each group.
+
+Syntax:
+
+select MANAGER_ID,JOB_ID,count(EMPLOYEE_id)
+from employees
+where JOB_ID = 'ST_CLERK'
+GROUP BY MANAGER_ID,JOB_ID;
+
+Having
+
+Having clause will be used with combination of Group by clause where it use to filter the output of agg function how it been grouped.
+
+
+
+select  Department_id, sum(salary) Sal
+From Employees
+where department_id = 90   -- Optional
+GROUP by DEPARTMENT_ID  -- Group the output for agg function
+Having min(salary) > 10000   ---   
+		                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+-------------------------------------------------------------------------
+
+select * from 
+(select order_id,year,cust_id
+from PIVOT_ONE)
+pivot
+(
+count (year)
+for year in (2005,2009)
+)
+order by order_id
+
+
+select * from
+(select manager_id,employee_id,department_id
+from employees)
+pivot
+(
+count (employee_id)
+for department_id in (90,60,100,30,50,80)
+) order by manager_id
+
+
+
+select department_id,listagg(first_name, ',') within group (order by department_id) as emp
+from employees
+group by department_id;
+
+
+select employee_id,
+case 
+when department_id = 90 then 'commerse'
+when department_id = 60 then 'maths'
+else 'no data'
+end as deparent       
+from employees;  
+
+
+
+Find the lowest name in each deparment.
+
+select first_name,department_id,salary
+from employees where salary in
+(
+select min(salary)
+from employees
+group by department_id
+) order by department_id 
+
+
+select * from
+(
+select * from employees order by salary desc fetch first 3 row only
+) order by salary asc fetch first 1 row only
+
+
+
+select salary,department_id
+from
+(select first_name,department_id,salary,dense_rank() over (partition by department_id order by salary desc) as r from employees) where r =2
+
+---------------------------------------------------------------
+select department_id,max(salary) as MAX_SAL,min(salary) as Min_sal
+from employees
+where job_id not in ('AD_PRES')
+group by department_id
+having count(department_id) > 2
+order by department_id
 
