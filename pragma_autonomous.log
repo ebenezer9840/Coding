@@ -1,0 +1,75 @@
+CREATE OR REPLACE PROCEDURE p1_em(a IN NUMBER,b IN number)
+AS
+  user_defined_err EXCEPTION;
+  pragma exception_init(User_defined_err,-20000);
+  CURSOR c1
+  IS
+    SELECT first_name FROM employees WHERE manager_id = a AND department_id = b;
+
+type col_1
+IS
+  TABLE OF VARCHAR(30) INDEX BY binary_integer;
+  err_code VARCHAR2(30);
+  err_desc VARCHAR2(30);
+  var_1 col_1;
+BEGIN
+  IF a = 0 OR b = 0 THEN
+    raise User_defined_err;
+  END IF;
+  OPEN c1;
+  FETCH c1 bulk collect INTO var_1;
+  FOR x IN 1..var_1.count
+  LOOP
+    dbms_output.put_line(var_1(x));
+  END LOOP;
+  CLOSE c1;
+EXCEPTION
+WHEN OTHERS THEN
+  err_code := SQLCODE;
+  err_desc := SUBSTR(sqlerrm,1,20);
+  p1_err(err_code,err_desc,'p1_em');
+END;
+/
+
+set serveroutput on
+exec p1_em(0,60)
+
+create table err_log(err_code number,err_desc varchar(30),proc_name varchar(30));
+
+select * from err_log
+
+CREATE OR REPLACE PROCEDURE p1_err(
+    a IN NUMBER,
+    b IN VARCHAR,
+    c IN VARCHAR)
+AS
+  pragma autonomous_transaction;
+BEGIN
+  INSERT INTO err_log VALUES
+    (a,b,c
+    );
+  COMMIT;
+END;
+/
+
+
+SELECT * FROM employees WHERE manager_id = 103 AND department_id = 60;
+
+
+--------------------------Function-----------------------------------
+create or replace function insert_f1(a in number, b in VARCHAR2)
+return number
+is
+c number;
+pragma autonomous_transaction;
+begin
+c:=a+2;
+insert into f1_1 values (c,b);
+commit;
+return c;
+end;
+/
+
+select INSERT_F1 (1,'RAJAN1') from dual;
+
+
