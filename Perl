@@ -1,0 +1,33 @@
+https://onecompiler.com/perl
+https://www.linkedin.com/pulse/perl-scripting-cheatsheet-beginners-dutt-panchal-h7iqf
+
+https://cheatsheets.zip/perl
+https://perldoc.perl.org/perlcheat
+
+
+
+
+#!/usr/bin/perl 
+use strict;
+use warnings;
+print "Hello, World \n";
+my $name ="rajan";
+print "This is $name \n";
+
+printf "this is printf %s \n",$name;
+
+print "ENTER YOUR Place of Birth \n";
+my $place = <STDIN>; 
+chomp ($place);   #Removes Trailing New spaces
+print "Entered value is $place \n";
+
+#string Function
+my $string = substr($name, 0, 2);
+my $index = index($name, "aj");
+
+print "Substr $string \n   index $index \n ";
+
+
+my @arr = split (/, /, $name);
+
+print "split $arr[0]" ;
